@@ -31,6 +31,7 @@ class AirportRepositoryImpl @Inject()(protected val dbConfigProvider: DatabaseCo
   }
 
   def getAirportsPerCountryObj(query: String, offset: Int, limit: Int): Future[Seq[Airport]] = db.run(
+
     airports.filter(a => {
       a.isoCountry.toLowerCase === query.toLowerCase
     }).drop(offset).take(limit).result

@@ -4,12 +4,11 @@ import javax.inject.{Inject, Singleton}
 
 import com.github.tototoshi.csv.CSVReader
 import domain.{Airport, Country, Runway}
-import play.api.Environment
+import play.api.{Environment, Logger}
 import repositories.{AirportRepository, CountryRepository, RunwayRepository}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
-
 
 @Singleton
 class DbService @Inject()(cp: CountryRepository,
@@ -42,6 +41,11 @@ class DbService @Inject()(cp: CountryRepository,
         Some(r("width_ft"))
       )), 1 second)
     )
+
+    Logger.info("Country Length: " + Await.result(cp.all(), 1 second).size)
+    Logger.info("Airport Length: " + Await.result(ap.all(), 1 second).size)
+    Logger.info("Runway Length: " + Await.result(rp.all(), 1 second).size)
+
   }
 
 

@@ -14,11 +14,11 @@ class QueryService @Inject()(ar: AirportRepository, cr: CountryRepository, rr: R
 
   def searchQuery(query: String): Seq[Country] = {
     val cbc = Await.result(cr.getCountryByCode(query), 1 second)
+    Logger.info("cbc: " + cbc)
     if (cbc.isEmpty) {
       val cbn = Await.result(cr.getCountryByName(query), 1 second)
       cbn
     } else {
-      Logger.debug("cbc: " + cbc)
       cbc
     }
   }
@@ -41,6 +41,8 @@ class QueryService @Inject()(ar: AirportRepository, cr: CountryRepository, rr: R
       countries = Await.result(cr.getTopTenAirportCountries(offset, limit), 1 second)
     else
       countries = Await.result(cr.getBottomTenAirportCountries(offset, limit), 1 second)
+
+    Logger.info("countries: " + countries)
 
     val topTen = Await.result(cr.getTopTenAirportCountries(offset, limit), 1 second).map {
       tt => {
